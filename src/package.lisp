@@ -7,4 +7,8 @@
    #:define-dispose
    #:with-disposables*
    #:disposable
-   #:disposedp))
+   #:disposedp
+
+   #:finalizer
+   #:define-finalizer
+   #:finalizable))

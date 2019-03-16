@@ -7,6 +7,8 @@
   ((:file "package")
    (:file "dispose" :depends-on ("package"))
    (:file "disposable" :depends-on ("package" "dispose"))
-   (:file "dispose-stream" :depends-on ("package" "dispose")))
+   (:file "dispose-stream" :depends-on ("package" "dispose"))
+   (:file "finalizer" :depends-on ("package"))
+   (:file "finalizable" :depends-on ("package" "finalizer" "dispose" "disposable")))
   :depends-on
-  ())
+  (#:trivial-garbage))
