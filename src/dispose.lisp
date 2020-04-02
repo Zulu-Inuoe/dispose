@@ -5,12 +5,13 @@
   ((around (:around))
    (primary (protect-progn) :order order :required t))
   (let ((primary-form (labels ((recurse (m)
-                                 (cond
-                                   ((rest m)
-                                    `(unwind-protect (call-method ,(first m))
-                                       ,(recurse (rest m))))
-                                   (t
-                                    `(call-method ,(first m))))))
+                                 (destructuring-bind (method . rest) m
+                                   (cond
+                                     (rest
+                                      `(unwind-protect (call-method ,method)
+                                         ,(recurse rest)))
+                                     (t
+                                      `(call-method ,method))))))
                         `(progn
                            ,(recurse primary)
                            (values)))))
@@ -38,11 +39,9 @@ Light wrapper around `defmethod' with the correct method combination."
   (labels ((recurse (bindings)
              (cond
                (bindings
-                (destructuring-bind (var val)
-                    (car bindings)
+                (destructuring-bind (var val) (car bindings)
                   `(let ((,var ,val))
-                     (unwind-protect
-                          ,(recurse (cdr bindings))
+                     (unwind-protect ,(recurse (cdr bindings))
                        (dispose ,var)))))
                (t
                 `(locally ,@body)))))
