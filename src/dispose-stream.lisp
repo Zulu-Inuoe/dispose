@@ -1,4 +1,4 @@
 (in-package #:dispose)
 
-(defmethod dispose protect-progn ((obj stream))
+(define-dispose (obj stream)
   (close obj))
